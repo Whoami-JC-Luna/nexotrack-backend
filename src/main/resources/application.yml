@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: nexotrack-backend
+
+# Actuator: solo se expone health. Cualquier otro endpoint se abre de forma
+# explícita y justificada (ver NXL-008).
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
