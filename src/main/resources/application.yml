@@ -2,6 +2,10 @@ spring:
   application:
     name: nexotrack-backend
 
+  mvc:
+    problemdetails:
+      enabled: true
+
 # Actuator: solo se expone health. Cualquier otro endpoint se abre de forma
 # explícita y justificada (ver NXL-008).
 management:
@@ -12,3 +16,10 @@ management:
   endpoint:
     health:
       show-details: never
+
+server:
+  error:
+    include-stacktrace: never
+    include-message: never
+    include-binding-errors: never
+    include-exception: false
