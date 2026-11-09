@@ -54,7 +54,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
             HttpStatus.INTERNAL_SERVER_ERROR,
-            "Servicio no disponible por este momento, inténtalo más tarde");
+            "Error interno, inténtalo más tarde");
         problem.setTitle("Internal Server Error");
         problem.setProperty("correlationId", correlationId);
         return problem;

@@ -68,7 +68,7 @@ public class GlobalExceptionHandlerTest {
             .andExpect(jsonPath("$.status").value(500))
             .andExpect(jsonPath("$.title").value("Internal Server Error"))
             .andExpect(jsonPath("$.detail")
-                .value("Servicio no disponible por este momento, inténtalo más tarde"))
+                .value("Error interno, inténtalo más tarde"))
 
             .andExpect(result -> {
                 String body = result.getResponse().getContentAsString();
