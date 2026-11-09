@@ -1,4 +1,4 @@
-package com.nexologistics.nexotrack;
+package com.nexologistics.nexotrack.shared.error;
 
 
 import jakarta.validation.constraints.NotBlank;
