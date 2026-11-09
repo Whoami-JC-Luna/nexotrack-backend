@@ -58,6 +58,27 @@ public class GlobalExceptionHandlerTest {
                 .value("La constraseña debe tener al menos 6 caracteres"));
 
     }
+    @Test
+    void return400WhenJsonIsMalformed() throws Exception {
+        String malformedJson = "{\"nombre\": ";
+
+        mockMvc.perform(
+                post("/test/bad-request")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(malformedJson)
+            )
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.detail").value("Failed to read request"))
+            .andExpect(result -> {
+                String body = result.getResponse().getContentAsString();
+                assertThat(body)
+                    .doesNotContain("com.nexologistics")
+                    .doesNotContain("JSON parse error")
+                    .doesNotContain("Exception");
+            });
+        }
 
     @Test
     void shouldReturn500WithoutExposingInternalDetails() throws Exception {
@@ -83,12 +104,4 @@ public class GlobalExceptionHandlerTest {
 
             });
     }
-
-
-
-
-
-
-
-
 }
