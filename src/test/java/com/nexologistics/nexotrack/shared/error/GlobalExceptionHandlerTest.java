@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,7 +22,7 @@ public class GlobalExceptionHandlerTest {
 
 
     @Test
-    void return404WhenResourceNotFound() throws Exception{
+    void return404WhenResourceNotFound() throws Exception {
         mockMvc.perform(get("/test/not-found"))
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -29,8 +30,6 @@ public class GlobalExceptionHandlerTest {
             .andExpect(jsonPath("$.title").value("Resource Not Found"))
             .andExpect(jsonPath("$.detail").value("Usuario no encontrado"));
     }
-
-
 
 
     @Test
@@ -58,6 +57,7 @@ public class GlobalExceptionHandlerTest {
                 .value("La constraseña debe tener al menos 6 caracteres"));
 
     }
+
     @Test
     void return400WhenJsonIsMalformed() throws Exception {
         String malformedJson = "{\"nombre\": ";
@@ -76,9 +76,10 @@ public class GlobalExceptionHandlerTest {
                 assertThat(body)
                     .doesNotContain("com.nexologistics")
                     .doesNotContain("JSON parse error")
-                    .doesNotContain("Exception");
+                    .doesNotContain("Exception")
+                    .doesNotContain("nombre");
             });
-        }
+    }
 
     @Test
     void shouldReturn500WithoutExposingInternalDetails() throws Exception {

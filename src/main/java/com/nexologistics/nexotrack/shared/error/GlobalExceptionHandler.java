@@ -59,11 +59,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setProperty("correlationId", correlationId);
         return problem;
     }
-
-
-
-
-
-
-
 }
