@@ -1,4 +1,4 @@
-package com.nexologistics.nexotrack;
+package com.nexologistics.nexotrack.shared.error;
 
 
 import org.junit.jupiter.api.Test;
@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,7 +22,7 @@ public class GlobalExceptionHandlerTest {
 
 
     @Test
-    void return404WhenResourceNotFound() throws Exception{
+    void return404WhenResourceNotFound() throws Exception {
         mockMvc.perform(get("/test/not-found"))
             .andExpect(status().isNotFound())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
@@ -29,8 +30,6 @@ public class GlobalExceptionHandlerTest {
             .andExpect(jsonPath("$.title").value("Resource Not Found"))
             .andExpect(jsonPath("$.detail").value("Usuario no encontrado"));
     }
-
-
 
 
     @Test
@@ -60,6 +59,29 @@ public class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void return400WhenJsonIsMalformed() throws Exception {
+        String malformedJson = "{\"nombre\": ";
+
+        mockMvc.perform(
+                post("/test/bad-request")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(malformedJson)
+            )
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.detail").value("Failed to read request"))
+            .andExpect(result -> {
+                String body = result.getResponse().getContentAsString();
+                assertThat(body)
+                    .doesNotContain("com.nexologistics")
+                    .doesNotContain("JSON parse error")
+                    .doesNotContain("Exception")
+                    .doesNotContain("nombre");
+            });
+    }
+
+    @Test
     void shouldReturn500WithoutExposingInternalDetails() throws Exception {
         mockMvc.perform(get("/test/server-error"))
             .andExpect(status().isInternalServerError())
@@ -68,7 +90,7 @@ public class GlobalExceptionHandlerTest {
             .andExpect(jsonPath("$.status").value(500))
             .andExpect(jsonPath("$.title").value("Internal Server Error"))
             .andExpect(jsonPath("$.detail")
-                .value("Servicio no disponible por este momento, inténtalo más tarde"))
+                .value("Error interno, inténtalo más tarde"))
 
             .andExpect(result -> {
                 String body = result.getResponse().getContentAsString();
@@ -83,12 +105,4 @@ public class GlobalExceptionHandlerTest {
 
             });
     }
-
-
-
-
-
-
-
-
 }

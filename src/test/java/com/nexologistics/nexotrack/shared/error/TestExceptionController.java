@@ -1,7 +1,6 @@
-package com.nexologistics.nexotrack;
+package com.nexologistics.nexotrack.shared.error;
 
 
-import com.nexologistics.nexotrack.shared.error.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
